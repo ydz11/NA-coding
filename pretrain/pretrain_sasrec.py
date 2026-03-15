@@ -57,7 +57,7 @@ def pretrain_sasrec(data: Ml1mSplit, cfg: SasRecPretrainConfig, out_dir: str | P
         n_users=data.n_users,
         seed=seed,
     )
-    dl = DataLoader(ds, batch_size=cfg.batch_size, shuffle=False, num_workers=0, pin_memory=(device_t.type == "cuda"))
+    dl = DataLoader(ds, batch_size=cfg.batch_size, shuffle=False, num_workers=4, pin_memory=(device_t.type == "cuda"))
 
     model.train()
     for ep in range(1, cfg.epochs + 1):
@@ -87,7 +87,7 @@ def pretrain_sasrec(data: Ml1mSplit, cfg: SasRecPretrainConfig, out_dir: str | P
             continue
         seq = seq[-model_cfg.max_len :]
         pad_len = model_cfg.max_len - len(seq)
-        x = torch.tensor(seq + ([0] * pad_len), dtype=torch.int64, device=device_t).view(1, -1)
+        x = torch.tensor(([0] * pad_len) + seq, dtype=torch.int64, device=device_t).view(1, -1)
         user_emb[uid] = model.user_embedding_from_seq(x).squeeze(0)
 
     item_emb = model.item_emb.weight.detach().clone().to(device_t)

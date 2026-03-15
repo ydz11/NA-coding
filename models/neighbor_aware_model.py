@@ -10,42 +10,6 @@ import torch.nn as nn
 from models.ncf_mlp import ncf_embedding_size, ncf_tower_layers
 
 
-class MeanAggregator(nn.Module):
-    def __init__(self):
-        super().__init__()
-
-    def forward(self, x: torch.Tensor, key_padding_mask: torch.Tensor = None) -> torch.Tensor:
-        if key_padding_mask is None:
-            return x.mean(dim=1)
-        mask = ~key_padding_mask
-        denom = mask.sum(dim=1).clamp(min=1).unsqueeze(-1)
-        return (x * mask.unsqueeze(-1)).sum(dim=1) / denom
-
-
-class SelfAttentionAggregator(nn.Module):
-    """
-    Self-attention over an unordered neighbor set.
-    Token 0 is the target user/item embedding; output uses token 0 representation.
-    """
-
-    def __init__(self, d_model: int, n_heads: int = 2, n_layers: int = 1, dropout: float = 0.1):
-        super().__init__()
-        enc_layer = nn.TransformerEncoderLayer(
-            d_model=d_model,
-            nhead=n_heads,
-            dim_feedforward=d_model * 4,
-            dropout=dropout,
-            batch_first=True,
-            activation="gelu",
-            norm_first=True,
-        )
-        self.encoder = nn.TransformerEncoder(enc_layer, num_layers=n_layers)
-        self.out_norm = nn.LayerNorm(d_model)
-
-    def forward(self, x: torch.Tensor, key_padding_mask: torch.Tensor = None) -> torch.Tensor:
-        h = self.encoder(x, src_key_padding_mask=key_padding_mask)
-        h0 = h[:, 0, :]
-        return self.out_norm(h0)
 
 
 @dataclass(frozen=True)

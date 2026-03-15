@@ -20,12 +20,12 @@ class SasRecPretrainConfig:
     max_len: int = 50
     n_heads: int = 2
     n_layers: int = 2
-    dropout: float = 0.1
+    dropout: float = 0.2
     batch_size: int = 256
     epochs: int = 20
-    steps_per_epoch: int = 1000
-    lr: float = 1e-3
-    clip_grad: float = 5.0
+    steps_per_epoch: int = 4000
+    lr: float = 5e-4
+    clip_grad: float = 1.0
     sdpa_backend: str = "math"
 
 

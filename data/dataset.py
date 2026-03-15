@@ -35,7 +35,7 @@ class SasRecRandomDataset(Dataset):
 
         prefix = prefix[-self.max_len :]
         pad_len = self.max_len - len(prefix)
-        x = prefix + ([0] * pad_len)
+        x = ([0] * pad_len) + prefix
         return np.array(x, dtype=np.int64), np.int64(target)
 
 @dataclass(frozen=True)
