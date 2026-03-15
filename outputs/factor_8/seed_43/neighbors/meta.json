@@ -1,7 +1,0 @@
-{
-  "k": 5,
-  "block_size": 512,
-  "n_users": 6040,
-  "n_items": 3952,
-  "train_ui_sha256": "474e9746e523f7f88b3fa9641332d2b4aca07222e0b23addfd1dbe1265e7cb8f"
-}

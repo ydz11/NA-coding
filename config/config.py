@@ -66,7 +66,7 @@ class Config:
     device: str = "auto"
     seed: int = 42
     factor_sweep: tuple[int, ...] = (8, 16, 32, 64)
-    seed_sweep: tuple[int, ...] = (42, 43, 44)
+    seed_sweep: tuple[int, ...] = (42,)
     paths: Paths = Paths()
     sasrec: SasRecPretrainConfig = SasRecPretrainConfig()
     neighbors: NeighborRetrievalConfig = NeighborRetrievalConfig()
